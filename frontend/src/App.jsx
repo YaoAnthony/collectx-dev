@@ -1,26 +1,53 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState,useLayoutEffect} from 'react'
 import './App.css'
+import { Header, Footer } from './Components'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { 
+  About,
+  Assets,
+  Browse,
+  Filter,
+  Main,
+  UserCollection,
+  UserProfilePage,
+} from "./Pages"
 
-import { Route, Routes, useLocation } from 'react-router-dom'
 
-import Splash from './components/Splash/Splash'
-import SignUp from './components/SignUp/SignUp'
-import Login from './components/Login/Login'
+import { style } from './styles';
 
+
+function ScrollToTop() {
+  const location = useLocation();
+
+  useLayoutEffect(() => {
+    // Scroll to the top of the page when the location changes
+    window.scrollTo(0, 0);
+  }, [location]);
+
+  // Return null as this component doesn't render anything
+  return null;
+}
 
 function App() {
-  // const [count, setCount] = useState(0)
-
   return (
-    <>
-        <Routes>
-          <Route path='/' element={<Splash />} />
-          <Route path='/signup' element={<SignUp />}/>
-          <Route path='/login' element={<Login />}/>
-        </Routes>
-    </>
+    <div className='w-full flex justify-center'>
+      <BrowserRouter>
+        <div className='w-full'>
+          <Header />
+          <main className={`${style.paddingX} ${style.paddingY} mt-8`}>
+            <Routes>
+              <Route path="/"           element={(<Main />)} />
+              <Route path="/About"      element={(<About />)} />
+              <Route path="/asset/:id"  element={(<Assets />)} />
+              <Route path="/browse"     element={(<Browse />)} />
+              <Route path="/filter"     element={(<Filter />)} />
+              <Route path="/:username/*"  element={(<UserProfilePage />)} />
+            </Routes>
+          </main>
+          <Footer />
+        </div>
+      </BrowserRouter>
+    </div>
   )
 }
 
